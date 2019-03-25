@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+{% if products != [] %}
+    {% for item in products %}
+        <div class="card mb-3">
+          <img src="{{item[3]}}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{ item[1] }}</h5>
+            <p class="card-text">{{ item[2] }}</p>
+              <a type="button" class="btn" style="text-decoration: none;" href="/addToKorz/{{item[0]}}">Добавить в корзину</a>
+          </div>
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}

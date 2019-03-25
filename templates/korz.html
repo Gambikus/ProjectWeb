@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+{% if products != [] %}
+    <div class="card mb-3" style="max-width: 800px;">
+      <div class="row no-gutters">
+          <div class="card-body">
+            <h5 class="card-title"> Ваша корзина </h5>
+          </div>
+            <ul class="list-group list-group-flush">
+                {% for item in products %}
+                    <li class="list-group-item">
+                        <div class="card mb-3">
+                          <img src="{{item[3]}}" class="card-img-top" alt="...">
+                          <div class="card-body">
+                            <h5 class="card-title">{{ item[1] }}</h5>
+                            <p class="card-text">{{ item[2] }}</p>
+                          </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+      </div>
+    </div>
+    <a type="button" class="btn" style="text-decoration: none;" href="/clear">Очистить корзину</a>
+    <br>
+{% else %}
+    <h1>Ваша корзина пуста:(</h1>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+    <div class="card mb-3" style="max-width: 1000px;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="https://naijaplanet.com/assets/placeholders/photo/profile/1.nophoto.b.png" class="card-img-left" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"> {{ user[1] }} </h5>
+            <p class="card-text">Вы - пользователь нашего сайта. Поздравляем!</p>
+          </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Имя: {{ user[3] }}</li>
+              <li class="list-group-item">Фамилия: {{ user[4] }}</li>
+              <li class="list-group-item">Страна: {{ user[6] }} </li>
+              <li class="list-group-item">Email: {{ user[5] }} </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+{% endblock %}
