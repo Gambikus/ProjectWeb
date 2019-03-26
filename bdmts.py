@@ -75,20 +75,21 @@ class UsersModel:
 
     def add_product(self, product_id):
         user = self.get(session['user_id'])
-        a = user[7] + ' ' + str(product_id)
-        self.delete(session['user_id'])
-        self.insert(user[1], user[2], user[3], user[4], user[5], user[6], a.strip())
-        session.pop('user_id', 0)
-        session['user_id'] = self.exists(user[1], user[2])[1]
+        a = (user[7] + ' ' + str(product_id)).strip()
+        cursor = self.connection.cursor()
+        cursor.execute(
+            '''UPDATE users SET products = '{}' WHERE id = {}'''.format(
+                a, str(session['user_id'])))
+        cursor.close()
+        self.connection.commit()
 
     def clear(self):
-        user = self.get(session['user_id'])
-        a = ''
-        self.delete(session['user_id'])
-        if not self.exists(user[1], user[2])[0]:
-            self.insert(user[1], user[2], user[3], user[4], user[5], user[6], a.strip())
-            session.pop('user_id', 0)
-            session['user_id'] = self.exists(user[1], user[2])[1]
+        cursor = self.connection.cursor()
+        cursor.execute(
+            '''UPDATE users SET products = '{}' WHERE id = {}'''.format(
+                '', str(session['user_id'])))
+        cursor.close()
+        self.connection.commit()
 
 
 class NewsModel:
@@ -186,10 +187,9 @@ news122.init_table()
 k = 0
 products_modell = ProductsModel(dataBase.get_connection())
 products_modell.init_table()
-'''products_modell.insert('Кеды Oliver Sweeney', 'Высококачественная обувь, сделанная из натуральной кожи. '
-                                              'В её подовшу встроены пружины, '
-                                              'которые обеспечивают комфорт во время ходьбы',
-                       'https://static.mainlinemenswear.co.uk/images/header/aw18-oliver-sweeney-banner.jpg', k)'''
+'''products_modell.insert('Тапочки', 'Теплые и удобные',
+                       'https://files.rakuten-static.de/ea731c4266d69e642f191931fcef8206/images/62206a72270b906e2544'
+                       'ea4cc11327ee.jpg', k)'''
 k += 1
 user_model1 = UsersModel(dataBase.get_connection())
 user_model1.init_table()
@@ -204,10 +204,34 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Войти')
 
 
+class RegForm(FlaskForm):
+    name = StringField('Имя', validators=[DataRequired()])
+    surname = StringField('Фамилия', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    country = StringField('Страна', validators=[DataRequired()])
+    username = StringField('Логин', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    submit = SubmitField('Зарегистрироваться')
+
+
 @app.route('/')
 @app.route('/home', methods=['GET', 'POST'])
 def start():
     form = LoginForm()
+    form1 = RegForm()
+    if form1.validate_on_submit():
+        user_name = form1.username.data
+        name = form1.name.data
+        surname = form1.surname.data
+        password = form1.password.data
+        country = form1.country.data
+        email = form1.email.data
+        user_model1.insert(user_name, password, name, surname, email, country, '')
+        exists = user_model1.exists(user_name, password)
+        if exists[0]:
+            session['username'] = user_name
+            session['user_id'] = exists[1]
+        return redirect("/home")
     if form.validate_on_submit():
         user_name = form.username.data
         password = form.password.data
@@ -217,7 +241,7 @@ def start():
             session['username'] = user_name
             session['user_id'] = exists[1]
         return redirect("/home")
-    return render_template('main.html', title='Магазин', form=form)
+    return render_template('main.html', title='Магазин', form=form, form1=form1)
 
 
 @app.route('/korzina')
@@ -241,8 +265,22 @@ def show_menu():
             session['username'] = user_name
             session['user_id'] = exists[1]
         return redirect("/products")
+    form1 = RegForm()
+    if form1.validate_on_submit():
+        user_name = form1.username.data
+        name = form1.name.data
+        surname = form1.surname.data
+        password = form1.password.data
+        country = form1.country.data
+        email = form1.email.data
+        user_model1.insert(user_name, password, name, surname, email, country, '')
+        exists = user_model1.exists(user_name, password)
+        if exists[0]:
+            session['username'] = user_name
+            session['user_id'] = exists[1]
+        return redirect("/products")
     products = products_modell.get_all()
-    return render_template('products.html', title='Магазин', form=form, products=products)
+    return render_template('products.html', title='Магазин', form=form, form1=form1, products=products)
 
 
 @app.route('/profile')

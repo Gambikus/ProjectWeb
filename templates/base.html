@@ -30,6 +30,9 @@
               <button type="button" class="nav-item btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                   Войти
               </button>
+              <button type="button" class="nav-item btn btn-primary" data-toggle="modal" data-target="#exampleModalReg">
+                  Зарегистрироваться
+              </button>
               {% endif %}
           </div>
       </nav>
@@ -46,13 +49,12 @@
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Авторизация</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-            <h1>Авторизация</h1>
             <form action="" method="post" novalidate>
                 {{ form.hidden_tag() }}
                 <p>
@@ -75,6 +77,81 @@
                 </p>
                 <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
                 <p>{{ form.submit() }}</p>
+            </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+        </div>
+    <div class="modal fade" id="exampleModalReg" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalRegLongTitle">Регистрация</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+            <form action="" method="post" novalidate>
+                {{ form1.hidden_tag() }}
+                <p>
+                    {{ form1.name.label }}<br>
+                    {{ form1.name }}<br>
+                    {% for error in form1.name.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form1.surname.label }}<br>
+                    {{ form1.surname }}<br>
+                    {% for error in form1.surname.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form1.email.label }}<br>
+                    {{ form1.email }}<br>
+                    {% for error in form1.email.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form1.country.label }}<br>
+                    {{ form1.country }}<br>
+                    {% for error in form1.country.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form1.username.label }}<br>
+                    {{ form1.username }}<br>
+                    {% for error in form1.username.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form1.password.label }}<br>
+                    {{ form1.password }}<br>
+                    {% for error in form1.password.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>{{ form1.submit() }}</p>
             </form>
                   </div>
                   <div class="modal-footer">
